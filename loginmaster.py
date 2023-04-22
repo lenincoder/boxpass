@@ -5,7 +5,6 @@ from tkinter import messagebox as mg
 import centerwindow
 import guimaster
 import DBConexion
-import boxconfig
 
 
 class Login:
@@ -15,8 +14,8 @@ class Login:
         conexion = DBConexion.logindbmaster(user, key)
 
         if conexion:  # Se evalua True o False
+            # Si se puede logear se puede ingresar a la base de datos
             self.master.destroy()
-            boxconfig.nmensaje('Acceso concedido a base de datos')
             guimaster.Aplicacion()
         else:
             mg.showerror(message="Usuario o cotraseña incorrectos", title="Login")
@@ -26,7 +25,7 @@ class Login:
         if self.usermaster.get() and self.passmaster.get():
             mg.showinfo(message="Esta accion borrara la base de datos anterior y no se podra recuperar.")
             new = DBConexion.nuevadb(self.usermaster.get(), self.passmaster.get())
-            boxconfig.nmensaje('Nueva base de datos creada correctamente')
+            mg.showinfo(message="Nueva base de datos creada correctamente")
         else:
             mg.showinfo(message="Debe rellenar todos los campos para crear la nueva DB", title="Login")
 
@@ -35,7 +34,7 @@ class Login:
         self.master.destroy()
 
     def __init__(self):
-        # crea la ventana
+        # crea la ventana de acceso
         self.ancho = 220
         self.alto = 120
         self.master = Tk()

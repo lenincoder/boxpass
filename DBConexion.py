@@ -66,4 +66,4 @@ def nuevadb(usermaster, passmaster):
 
 
 if __name__ == '__main__':
-    logindbmaster('vicente', '9874')
+    logindbmaster('admin', '1234')

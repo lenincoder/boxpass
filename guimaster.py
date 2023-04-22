@@ -6,7 +6,7 @@ import sqlite3
 
 import centerwindow
 import randompass as rp
-from boxconfig import nmensaje, get_mac_dir
+# from boxconfig import get_mac_dir
 from security import make_a_key, encript, decrypt
 
 
@@ -35,12 +35,12 @@ class Aplicacion:
         # Variables y constantes
         self.id = StringVar()
         self.checkbox_value = IntVar()
-        self.hidekey = make_a_key(get_mac_dir())  # Crea una llave con direccion mac de la pc
+        self.hidekey = make_a_key()  # Crea una llave
         my_var = IntVar(self.raiz)  # valor por defecto del Spinbox
-        my_var.set(4)
+        my_var.set(5)
 
         # Widgets
-        self.spvalor = ttk.Spinbox(self.raiz, from_=4, to=10, textvariable=my_var, wrap=True, state='readonly')
+        self.spvalor = ttk.Spinbox(self.raiz, from_=5, to=15, textvariable=my_var, wrap=True, state='readonly')
         self.spvalor.place(x=10, y=10, width=70, height=24)
         ttk.Button(self.raiz, text='Pass Random', command=self.call_randompass).place(x=90, y=10, width=100, height=24)
         self.entrypass = ttk.Entry(self.raiz, justify=tkinter.RIGHT)
@@ -107,7 +107,7 @@ class Aplicacion:
         # Borra el contenido de los entry
         # Encripta los registros en la base de datos
         # Actualiza la tabla de datos
-        if get_mac_dir():
+        if make_a_key():
             datos = encript(self.entryurl.get(), self.hidekey), encript(self.entryusuario.get(), self.hidekey), encript(self.entrypassword.get(), self.hidekey)
             conexion = sqlite3.connect('database/key.db')
             cursor = conexion.cursor()
@@ -115,7 +115,6 @@ class Aplicacion:
             conexion.commit()
             cursor.close()
             conexion.close()
-            nmensaje('Registro agregado')
             self.actualizar_tabla()
         else:
             messagebox.showwarning(message='No se ha podido ingresar el registro', title='ERROR!!')
@@ -178,7 +177,7 @@ class Aplicacion:
 
         except sqlite3.OperationalError:
             messagebox.showwarning(message='Ocurrio un error al eliminar el registro, intente seleccionar el registro antes de eliminarlo', title='ADVERTENCIA!!')
-            nmensaje('No se ha modificado la base de datos')
+            # 'No se ha modificado la base de datos'
 
     def select_event(self, event):
         # Selecciona el registro y los agrega a los widget Entry

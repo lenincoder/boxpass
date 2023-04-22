@@ -1,3 +1,4 @@
+import sqlite3
 from hashlib import md5
 from hmac import compare_digest
 import cryptocode
@@ -15,10 +16,20 @@ def verify(cadenaencriptada, cadenasinencriptar):
     return compare_digest(cadenaencriptada, stringclient)   # regresa True o False
 
 
-def make_a_key(texto):
+def make_a_key():
+    # Hace una consulta la db para extraer en nombre de usuario y formar una key
+    conexion = sqlite3.connect("database/key.db")
+    cursor = conexion.cursor()
+    # cursor.execute("SELECT * FROM consumer WHERE name=? AND clave=?", (superuser, superpass))
+    cursor.execute("SELECT name FROM consumer")
+    resultado = cursor.fetchone()
+    namedb = resultado[0]
+    cursor.close()
+    conexion.close()
     # Crea una palabra clave en base al nombre del usuario para desemcriptar
-    dokey = '2022'+texto+'lml'
-    return dokey
+    if len(namedb) > 0:
+        dokey = '2022'+namedb[:4]+'lml'
+        return dokey
 
 
 def encript(toencript, keyword):
@@ -37,6 +48,7 @@ def decrypt(todecript, keyword):
 
 
 if __name__ == '__main__':
-    cadena = cifrado('hola mundo')
-    print(cadena)
-    print(verify(cadena, 'hola mundo'))
+    # cadena = cifrado('hola mundo')
+    # print(cadena)
+    # print(verify(cadena, 'hola mundo'))
+    print(make_a_key())
